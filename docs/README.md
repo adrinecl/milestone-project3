@@ -69,8 +69,12 @@ The following features will be included in the current project's scope:
 
 - __Main Menu section__
 
-  - 
-
+  - 1: Enter a new order
+  - 2: Find order by ID
+  - 3: List dropped off orders
+  - 4: List ready for pickup orders
+  - 5: List picked up orders
+  - 0: Quit
 
 
 <details>
@@ -152,7 +156,15 @@ The project was deployed to Heroku.
 
 These are the steps to deploy to Heroku:
 
-
+1. Log onto Heroku and click the "Create new app" button.
+2. Enter a unique name for your application.
+3. Select the region closest to you.
+4. Go to settings, then click on reveal config vars.
+5. Enter your key value pairs in "Config Vars" as needed. For this project, the information from creds.json listed in the .gitignore file is added here.
+6. Add "Buildpacks" if needed. For this project, Python and Node.js were selected in this order.
+7. Set your deployment method to "GitHub" and click "Connect to Github".
+8. Search for the repository you wish to deploy from and click "Connect".
+9. Enable automatic deploy or choose to deploy manually as you prefer.
 
 
 ## Credits
