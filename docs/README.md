@@ -1,6 +1,6 @@
-# Rinse and Repeat dry cleaning
+# Rinse and Repeat Dry Cleaning
 
-[View the live project here.](**ADD LINK LATER**)
+[View the live project here.](https://rinse-and-repeat.herokuapp.com/)
 
 
 ![Program Mockup](**ADD IMAGE LATER**)
@@ -27,10 +27,10 @@ As a [type of user], I want [an action] so that [a reason/a value].
 5. I want to identify the orders with unique numbers, so I can quickly find my client's clothes when they are picking up at the store.
 6. I want to mark orders as "picked up" when the customer gets their order.
 
-The ideal user is the owner / manager, dry cleaner and store assistent at a dry cleaning company, attending customers and managing orders on a daily basis. Since in a small store all of these functions can be performed by the same person, only one type of user is considered above for these user stories, but it is possible that users with different roles all can benefit of different parts of this order management system. As a general example:
+The ideal user is the owner / manager, dry cleaner and store assistent at a dry cleaning company, attending customers and managing orders on a daily basis. Since in a small store all of these functions can be performed by the same person, only one type of user is considered above for these user stories, but it is possible that users with different roles can all benefit from different functions of this order management system. As a general example:
 - A business owner / manager can consult the order history and check the general status of all orders, the total amounts and so on to better plan for the business.
 - A dry cleaner can see which orders are still left to be worked on.
-- A store assistant can easily enter new orders and change order status as customers come in.
+- A store assistant can easily enter new orders and change order status as customers come into the store.
 
 In future features, it would be good to do further research on the needs of different roles in different dry cleaning companies of varied sizes.
 
@@ -94,21 +94,24 @@ The following features will be included in the current project's scope:
 The main menu offers the main operations the user directly needs access to.
 The options are ordered by relevance and the need to provide fast service to the customer. Therefore, creating an order is the first item.
 
-  - 1: Enter a new order
-    Allows the user to create a new order.
-  - 2: Find order by ID
-  - 3: List dropped off orders
-  - 4: List ready for pickup orders
-  - 5: List picked up orders
-  - 0: Quit
+- 1: Enter a new order: Allows the user to create a new order. All new orders are automatically marked as "dropped off".
+- 2: Find order by ID: Allows the user to consult one individual order in detail. Here the user can change the order status to "ready for pickup" or to "picked up", depending on the current applicable situation.
+- 3: List dropped off orders: This option lists all orders that have been dropped off by customers and still need to be dry cleaned / washed.
+- 4: List ready for pickup orders: This option lists all orders that are cleaned and ready for customers to pickup.
+- 5: List picked up orders: This option lists all finalized orders that have already been cleaned and picked up by customers.
+- 6: List all orders: This option allows the user to view the order history.
+- 0: Quit: This option exits the program.
 
 
 <details>
 <summary>Future features</summary>
-- The possibility to cancel orders and generate "refunds".
-- The possibility to mark an order as paid or to be paid on pickup.
+- The possibility to mark individual items as "ready for pickup" and later "picked up". This allows the customer to pickup items that are ready first in case they are in a rush.
+- The possibility to (in a safe way) delete to cancel orders and generate "refunds".
+- The possibility to mark an order as paid, partially paid or to be paid on pickup.
+- The possibility to offer other services such as shoe repair, smaller sewing adjustments and repairs as well as price calculation based on dimensions or material, which is important for some items like curtains and carpets.
 - The possibility to email/SMS customers with a confirmation email when their order has been dropped off, paid and then when their order is marked as ready to be picked up.
 - The possibility to see business statistics.
+- The possibility to log changes.
 - Future features could include a website and front-end layout connected to a database instead of Google Drive and Google Sheets.
 - More functionalities could be added for creating and editing an order.
 - It could be possible for the customer to login to the website to check the status of their orders, when they are ready to be picked up, if they are already paid and their general order history.
