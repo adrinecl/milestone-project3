@@ -206,16 +206,19 @@ def view_customer_information(orders):
     print_customers(customers)
 
 
-def print_edit_menu():
+def print_edit_menu(orders):
     """
     Print a list of commands for the order editing. This function does not
     handle user input, it just prints the list to the terminal. The commands
     are numbered from 1 through 4, with a special 0 command to go back to the
     previous menu.
     """
+    status = orders[0]['Status']
     print('')
-    print('1: Mark as ready for pickup')
-    print('2: Mark as picked up')
+    if status != 'Ready for pickup':
+        print('1: Mark as ready for pickup')
+    if status == 'Ready for pickup':
+        print('2: Mark as picked up')
     print('')
     print('3: View customer information')
     print('')
@@ -269,7 +272,7 @@ def edit_order_by_id(order_id):
                 print('Could not find an order with a matching ID.')
                 break
             print_orders(orders)
-        print_edit_menu()
+        print_edit_menu(orders)
         (back, load) = edit_menu(orders)
 
 
