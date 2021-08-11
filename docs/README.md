@@ -182,6 +182,9 @@ This option exits the program when the user selects 0, q or Q. The program then 
 7. [Google Drive](https://www.google.com/drive/)
     - Google Drive is used indirectly, since this is where the Google Sheets spreadsheet is stored.
 
+8. [GSpread API Reference](https://docs.gspread.org/en/latest/api.html)
+    - The API reference for the GSpread library for Python. It provides an easy interface for working with Google Sheets from code.
+
 
 </details>
 
