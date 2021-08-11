@@ -23,6 +23,15 @@ def print_orders(orders):
     """
     print(tabulate(orders, headers="keys"))
 
+def print_customers(customers):
+    """
+    Print a list of customers in a nicely formatted table. The column titles are the
+    keys of the row dictionaries. Note that this function works with lists of rows
+    as dictionaries, not lists of rows as lists. This is the format we use in most
+    functions, e.g., `fetch_customers[_...]`.
+    """
+    print(tabulate(customers, headers="keys"))
+
 def fetch_orders():
     """
     Fetch all rows from the Orders worksheet. Each row is represented by a
@@ -82,6 +91,24 @@ def list_all_orders():
     """
     print_orders(fetch_orders())
 
+def fetch_customers():
+    """
+    Fetch all rows from the Customers worksheet. Each row is represented by a
+    dictionary with the column headers as the key names. The data type of each
+    value is determined by the data type in the columns of the worksheet.
+    """
+    return SHEET.worksheet('Customers').get_all_records()
+
+def fetch_customers_with_order_id(order_id):
+    """
+    Fetch rows from the Customers worksheet, which has a certain order ID. The
+    order ID must be a number, not a string. The result will be a list of one or
+    zero items, depending on whether the order ID was found in the worksheet or
+    not. We return the single matching row as a list so that we can easily pass
+    it to the functions that works with lists of rows, e.g., `print_customers`.
+    """
+    return list(filter(lambda customer: customer['Order ID'] == order_id, fetch_customers()))
+
 def mark_order(order, status, date_column, clear_column_letters):
     """
     Change the value of the "Status" column of the given order. We first find the
@@ -115,16 +142,6 @@ def mark_orders(orders, status, date_column, clear_columns):
     for order in orders:
         mark_order(order, status, date_column, clear_columns)
 
-def mark_orders_dropped_off(orders):
-    """
-    Change the value of the "Status" column of the given list of orders to
-    "Dropped off", and update set the "Dropped off" date column to today's date.
-    The "Ready for pickup" and "Picked up" date columns are cleared. It is the
-    responsibility of the caller to ensure that all orders exist in the sheet. If
-    not, an unspecified error is raised and the program likely exits.
-    """
-    mark_orders(orders, 'Ready for pickup', 3, ['D', 'E'])
-
 def mark_orders_ready_for_pickup(orders):
     """
     Change the value of the "Status" column of the given list of orders to "Ready
@@ -144,16 +161,28 @@ def mark_orders_picked_up(orders):
     """
     mark_orders(orders, 'Picked up', 5, [])
 
+def view_customer_information(orders):
+    """
+    Fetch the customer for the given order and print their information in a nice
+    table. Note that this function currently has the limitation that it accepts
+    exactly one order in the list, no more, no less. It is the responsibility of
+    the caller to make sure that the list contains exaclly one order.
+    """
+    order_id = orders[0]['ID']
+    customers = fetch_customers_with_order_id(order_id)
+    print_customers(customers)
+
 def print_edit_menu():
     """
     Print a list of commands for the order editing. This function does not handle
     user input, it just prints the list to the terminal. The commands are numbered
-    from 1 through 2, with a special 0 command to go back to the previous menu.
+    from 1 through 4, with a special 0 command to go back to the previous menu.
     """
     print('')
-    print('1: Mark as dropped off')
-    print('2: Mark as ready for pickup')
-    print('3: Mark as picked up')
+    print('1: Mark as ready for pickup')
+    print('2: Mark as picked up')
+    print('')
+    print('3: View customer information')
     print('')
     print('0: Back')
     print('')
@@ -163,43 +192,48 @@ def edit_menu(orders):
     Display the order editing menu, given a list of orders. The user can input a
     command number from the list. If the command is valid, the corresponding
     command function is executed; otherwise print an error message and the ask
-    the user again to enter a menu command. Returns False if the user exited the
-    menu, and True if the user executed a command that changed the orders.
+    the user again to enter a menu command. Returns True if the user exited the
+    menu, and False if the user executed a command that changed the orders.
     """
     while True:
-        print_orders(orders)
-        print_edit_menu()
         command = input('> ').strip()
         options = {
-            '1': mark_orders_dropped_off,
-            '2': mark_orders_ready_for_pickup,
-            '3': mark_orders_picked_up
+            '1': mark_orders_ready_for_pickup,
+            '2': mark_orders_picked_up,
+            '3': view_customer_information
         }
         if not command: continue
-        if command == '0': return False
-        if command == 'b': return False
-        if command == 'B': return False
+        if command == '0': return (True, False)
+        if command == 'b': return (True, False)
+        if command == 'B': return (True, False)
         if command not in options:
             print('Unknown command:', command)
             print('')
             continue
         print('')
         options[command](orders)
-        return True
+        return (False, command != '3')
 
 def edit_order_by_id(order_id):
     """
     Fetch the order matching the order ID entered by the user. If the order can
-    be found, display the edit meny, otherwise print an error message and exit. 
+    be found, display the edit menu, otherwise print an error message and exit.
+    The user stays in the edit manu until the explicitly going back to the
+    previous menu.
     """
     print('')
-    while True:
-        orders = fetch_orders_with_id(order_id)
-        if len(orders) == 0:
-            print('Could not find an order with a matching ID.')
-            break
-        if not edit_menu(orders):
-            break
+    orders = []
+    back = False
+    load = True
+    while not back:
+        if load:
+            orders = fetch_orders_with_id(order_id)
+            if len(orders) == 0:
+                print('Could not find an order with a matching ID.')
+                break
+            print_orders(orders)
+        print_edit_menu()
+        (back, load) = edit_menu(orders)
 
 def parse_order_id(order_id_string):
     """
