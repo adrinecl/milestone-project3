@@ -1,4 +1,6 @@
+import datetime
 import gspread
+from tabulate import tabulate
 from google.oauth2.service_account import Credentials
 
 SCOPE = [
