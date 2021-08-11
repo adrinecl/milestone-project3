@@ -59,8 +59,13 @@ Users: quickly learn to operate and access order information to keep all busines
 The scope defines which features will be implemented and which will not be implemented at this stage. 
 The following features will be included in the current project's scope:
 
-- **:** 
-
+- **1: Enter a new order:** Allows the user to create a new order. All new orders are automatically marked as "dropped off".
+- **2: Find order by ID:** Allows the user to consult one individual order in detail. Here the user can change the order status to "ready for pickup" or to "picked up", depending on the current applicable situation.
+- **3: List dropped off orders:** This option lists all orders that have been dropped off by customers and still need to be dry cleaned / washed.
+- **4: List ready for pickup orders:** This option lists all orders that are cleaned and ready for customers to pickup.
+- **5: List picked up orders:** This option lists all finalized orders that have already been cleaned and picked up by customers.
+- **6: List all orders:** This option allows the user to view the order history.
+- **0: Quit:** This option quits the program.
 
 
 #### Structure
@@ -86,7 +91,11 @@ The following features will be included in the current project's scope:
 
 - __Main Menu section__
 
+The main menu offers the main operations the user directly needs access to.
+The options are ordered by relevance and the need to provide fast service to the customer. Therefore, creating an order is the first item.
+
   - 1: Enter a new order
+    Allows the user to create a new order.
   - 2: Find order by ID
   - 3: List dropped off orders
   - 4: List ready for pickup orders
@@ -96,6 +105,10 @@ The following features will be included in the current project's scope:
 
 <details>
 <summary>Future features</summary>
+- The possibility to cancel orders and generate "refunds".
+- The possibility to mark an order as paid or to be paid on pickup.
+- The possibility to email/SMS customers with a confirmation email when their order has been dropped off, paid and then when their order is marked as ready to be picked up.
+- The possibility to see business statistics.
 - Future features could include a website and front-end layout connected to a database instead of Google Drive and Google Sheets.
 - More functionalities could be added for creating and editing an order.
 - It could be possible for the customer to login to the website to check the status of their orders, when they are ready to be picked up, if they are already paid and their general order history.
