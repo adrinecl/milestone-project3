@@ -32,6 +32,12 @@ By finding the order by ID, the user can easily mark the order as ready to be pi
 If you don't enter any quantities, a order is still created.
 ![Create Order - test 1](https://github.com/adrinecl/milestone-project3/blob/master/docs/images/rinse-and-repeat_testing1.jpg)
 
-**2. "View customer information" showing submenu options**
+**Solution:**This bug was fixed, by aborting the order entry if the quantity of all items is zero. A message is printed for the user.
+
+### Unfixed Bugs
+**1. "View customer information" showing submenu options**
+- While viewing the customer information, some options are still shown to change status of the order.
 ![View customer information - bug](https://github.com/adrinecl/milestone-project3/blob/master/docs/images/rinse-and-repeat_viewing-customer-information-bug.jpg)
+
+This is not a bug in the code, but a usability bug. It was too messy to display both the order table and the customer table at the same time. The solution of only showing the customer table is confusing. A good solution is to enter a sub-menu when viewing customer infornation.
 

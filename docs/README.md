@@ -202,12 +202,12 @@ This option exits the program when the user selects 0, q or Q. The program then 
 ### Fixed Bugs
 
 Throughout the project some bugs were fixed:
-
 [Fixed bugs](https://github.com/adrinecl/milestone-project3/blob/master/docs/TESTING.md)
 
 ### Unfixed Bugs
 
-- 
+- Throughout the project some bugs were not fixed:
+[Unfixed bugs](https://github.com/adrinecl/milestone-project3/blob/master/docs/TESTING.md)
 
 ### Supported Screens and Browsers
 
