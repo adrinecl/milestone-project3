@@ -75,6 +75,70 @@ def list_picked_up_orders():
     """
     print_orders(fetch_orders_with_status('Picked up'))
 
+def print_edit_menu():
+    """
+    Print a list of commands for the order editing. This function does not handle
+    user input, it just prints the list to the terminal. The commands are numbered
+    from 1 through 2, with a special 0 command to go back to the previous menu.
+    """
+    print('')
+    print('1: Mark as ready for pickup')
+    print('2: Mark as picked up')
+    print('')
+    print('0: Back')
+    print('')
+
+def edit_menu(orders):
+    """
+    Display the order editing menu, given a list of orders. The user can input a
+    command number from the list. If the command is valid, the corresponding
+    command function is executed; otherwise print an error message and the ask
+    the user again to enter a menu command.
+    """
+    while True:
+        print_edit_menu()
+        command = input('> ').strip()
+        options = {}
+        if not command: continue
+        if command == '0': break
+        if command == 'b': break
+        if command == 'B': break
+        if command not in options:
+            print('Unknown command:', command)
+            print('')
+            continue
+        print('')
+        options[command](orders)
+
+def parse_order_id(order_id_string):
+    """
+    Given a string, as entered by the user, convert it to a validated order ID.
+    If the string does not represent a valid order ID, e.g., not a number or a
+    negative number, a ValueError is raised for the caller to handle.
+    """
+    order_id = int(order_id_string)
+    if order_id <= 0:
+        raise ValueError('Must be greater than 0.')
+    return order_id
+
+def find_order_by_id():
+    """
+    Ask the user to enter an order ID and look it up in the Orders worksheet. If
+    the order is found, print it and enter a submenu with operations that can be
+    performed on the single order, e.g., marking it as being ready for pickup.
+    """
+    try:
+      order_id = parse_order_id(input('Order ID: '))
+      orders = fetch_orders_with_id(order_id)
+      if len(orders):
+          print('')
+          print_orders(orders)
+          edit_menu(orders)
+      else:
+          print('Could not find an order with a matching ID.')
+    except ValueError as e:
+        print('Invalid order ID:', e)
+
 def print_main_menu():
     """
     Print a list of commands for the main menu. This function does not handle user
@@ -93,29 +157,30 @@ def print_main_menu():
     print('')
 
 def main_menu():
-  """
-  Display the program main menu, given a list of orders. The user can input a
-  command number from the list. If the command is valid, the corresponding
-  command function is executed; otherwise print an error message and the ask
-  the user again to enter a menu command.
-  """
-  while True:
-    print_main_menu()
-    command = input('> ').strip()
-    options = {
-      '3': list_dropped_off_orders,
-      '4': list_ready_for_pickup_orders,
-      '5': list_picked_up_orders
-    }
-    if not command: continue
-    if command == '0': break
-    if command == 'q': break
-    if command == 'Q': break
-    if command not in options:
-      print('Unknown command:', command)
-      continue
-    print('')
-    options[command]()
+    """
+    Display the program main menu, given a list of orders. The user can input a
+    command number from the list. If the command is valid, the corresponding
+    command function is executed; otherwise print an error message and the ask
+    the user again to enter a menu command.
+    """
+    while True:
+        print_main_menu()
+        command = input('> ').strip()
+        options = {
+            '2': find_order_by_id,
+            '3': list_dropped_off_orders,
+            '4': list_ready_for_pickup_orders,
+            '5': list_picked_up_orders
+        }
+        if not command: continue
+        if command == '0': break
+        if command == 'q': break
+        if command == 'Q': break
+        if command not in options:
+            print('Unknown command:', command)
+            continue
+        print('')
+        options[command]()
 
 def main():
     """
