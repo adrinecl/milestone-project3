@@ -7,16 +7,32 @@
 
 ## About the Program
 
+"Rinse and Repeat" is a command-line interface program for a fictional dry cleaning company. It is intended for the small, newly started dry cleaning company lacking the resources to spend on an expensive order management system. 
+
+The program can be accessed by a link on the browser, running a mockup terminal.
+It is possible to enter new orders, see an individual order in detail, consult the status of the orders and see all order history. It is also possible to change the status from "dropped off" to "ready for pickup" and later to "picked up" when the customer gets their order. Finally, it is possible to quit the program.
 
 ## Planning phase
 ### User Experience (UX)
 
 #### User stories
 
-As a [type of user], I want [an action] so that [a reason/a value]
+As a [type of user], I want [an action] so that [a reason/a value].
 
-**First Time Visitor Goals**
-1. As a First Time Visitor, I want to 
+**User Goals**
+1. As a User, I want to have a smart, inexpensive and efficient solution to manage orders in my dry cleaning business. 
+2. I want to be able to enter new orders, as clients come into the store with items dropped off for dry cleaning.
+3. I want to be able to enter how many and the type of items that are being dropped off.
+4. I want to be able to consult orders in details, so I know which orders still need to be done and I can mark them as ready to avoid mixing them up.
+5. I want to identify the orders with unique numbers, so I can quickly find my client's clothes when they are picking up at the store.
+6. I want to mark orders as "picked up" when the customer gets their order.
+
+The ideal user is the owner / manager, dry cleaner and store assistent at a dry cleaning company, attending customers and managing orders on a daily basis. Since in a small store all of these functions can be performed by the same person, only one type of user is considered above for these user stories, but it is possible that users with different roles all can benefit of different parts of this order management system. As a general example:
+- A business owner / manager can consult the order history and check the general status of all orders, the total amounts and so on to better plan for the business.
+- A dry cleaner can see which orders are still left to be worked on.
+- A store assistant can easily enter new orders and change order status as customers come in.
+
+In future features, it would be good to do further research on the needs of different roles in different dry cleaning companies of varied sizes.
 
 #### Strategy
 
