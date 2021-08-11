@@ -75,6 +75,13 @@ def list_picked_up_orders():
     """
     print_orders(fetch_orders_with_status('Picked up'))
 
+def list_all_orders():
+    """
+    Fetch all orders and print them to the terminal as a table. There is no
+    pagination, so if the list is long, then the printed table will also be long.
+    """
+    print_orders(fetch_orders())
+
 def mark_order(order, status, date_column, clear_column_letters):
     """
     Change the value of the "Status" column of the given order. We first find the
@@ -280,7 +287,8 @@ def main_menu():
             '2': find_order_by_id,
             '3': list_dropped_off_orders,
             '4': list_ready_for_pickup_orders,
-            '5': list_picked_up_orders
+            '5': list_picked_up_orders,
+            '6': list_all_orders,
         }
         if not command: continue
         if command == '0': break
@@ -299,7 +307,7 @@ def main():
     by user input. Finally, print a goodbye message, because it is just polite.
     """
     print('')
-    print('Welcome to Rinse and Repeat dry cleaning')
+    print('Welcome to Rinse and Repeat Dry Cleaning')
     print('----------------------------------------')
     print('Enter menu commands (1 through 6) from the list below using the keyboard.')
     print('Press return to perform the command. To exit the program, enter 0 or Q.')
