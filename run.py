@@ -304,7 +304,7 @@ def print_main_menu():
     """
     Print a list of commands for the main menu. This function does not handle user
     input, it just prints the list to the terminal. The commands are numbered from
-    1 through 5, with a special 0 command to quit the program.
+    1 through 6, with a special 0 command to quit the program.
     """
     print('')
     print('1: Enter a new order')
@@ -350,15 +350,15 @@ def main():
     """
     Print a welcome message and some instructions on how to use the program, after
     which the main menu is displayed and run until the program is asked to quit,
-    by user input. Finally, print a good bye message, because it is just polite.
+    by user input. Finally, print a goodbye message, because it is just polite.
     """
     print('')
     print('Welcome to Rinse and Repeat dry cleaning')
     print('----------------------------------------')
-    print('Enter menu commands (1 through 5) from the list below using the keyboard.')
+    print('Enter menu commands (1 through 6) from the list below using the keyboard.')
     print('Press return to perform the command. To exit the program, enter 0 or Q.')
     main_menu()
     print('')
-    print('Good bye, have a fantastic day!')
+    print('Goodbye, have a fantastic day!')
 
 main()
