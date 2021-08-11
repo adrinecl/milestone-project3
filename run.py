@@ -296,15 +296,15 @@ def main():
     """
     Print a welcome message and some instructions on how to use the program, after
     which the main menu is displayed and run until the program is asked to quit,
-    by user input. Finally, print a good bye message, because it is just polite.
+    by user input. Finally, print a goodbye message, because it is just polite.
     """
     print('')
     print('Welcome to Rinse and Repeat dry cleaning')
     print('----------------------------------------')
-    print('Enter menu commands (1 through 5) from the list below using the keyboard.')
+    print('Enter menu commands (1 through 6) from the list below using the keyboard.')
     print('Press return to perform the command. To exit the program, enter 0 or Q.')
     main_menu()
     print('')
-    print('Good bye, have a fantastic day!')
+    print('Goodbye, have a fantastic day!')
 
 main()

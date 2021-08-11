@@ -90,21 +90,53 @@ The following features will be included in the current project's scope:
 ### Existing Features
 
 - __Main Menu section__
-
 The main menu offers the main operations the user directly needs access to.
 The options are ordered by relevance and the need to provide fast service to the customer. Therefore, creating an order is the first item.
 
-- 1: Enter a new order: Allows the user to create a new order. All new orders are automatically marked as "dropped off".
-- 2: Find order by ID: Allows the user to consult one individual order in detail. Here the user can change the order status to "ready for pickup" or to "picked up", depending on the current applicable situation.
-- 3: List dropped off orders: This option lists all orders that have been dropped off by customers and still need to be dry cleaned / washed.
-- 4: List ready for pickup orders: This option lists all orders that are cleaned and ready for customers to pickup.
-- 5: List picked up orders: This option lists all finalized orders that have already been cleaned and picked up by customers.
-- 6: List all orders: This option allows the user to view the order history.
-- 0: Quit: This option exits the program.
+When the program starts, a welcome message is displayed "Welcome to Rinse and Repeat Dry Cleaning" and the user is prompted to select an option "Enter menu commands (1 through 6) from the list below using the keyboard."
+"Press return to perform the command. To exit the program, enter 0 or Q."
+
+- __1: Enter a new order__
+Allows the user to create a new order. The user sees the individual prices in Euros for dry cleaning each item and is expected to enter the quantity. If an item has quantity 0, the user can simply press "Enter" to skip it. All orders numbers are generated automatically by increments of 1, starting at 1, which is the first order number manually entered in the spreadsheet. All new orders are automatically marked as "dropped off" and the "dropped off date" is also set then.
+
+The new order line is then created and further options are given for that order just created.
+    - 1: Mark as ready for pickup: changes the status of the order to "ready for pickup", sets the date of "ready for pickup".
+    - 2: Mark as picked up: changes the status of the order to "picked up", sets the date of "picked up".
+    - 3: View customer contact information: shows the customer name, email and phone number, so that the store can contact the customer when an order is ready to be picked up.
+    - 0: Back
+
+- __2: Find order by ID__
+Allows the user to consult one individual order in detail. Here the user can change the order status to "ready for pickup" or to "picked up", depending on the current applicable situation.
+
+The order line is then displayed and further options are given for the order comsulted.
+    - 1: Mark as ready for pickup: changes the status of the order to "ready for pickup", sets the date of "ready for pickup".
+    - 2: Mark as picked up: changes the status of the order to "picked up", sets the date of "picked up".
+    - 3: View customer contact information: shows the customer name, email and phone number, so that the store can contact the customer when an order is ready to be picked up.
+    - 0: Back
+
+- __3: List dropped off orders__
+This option lists all orders that have been dropped off by customers and still need to be dry cleaned / washed.
+All the main menu options appear below the list.
+
+- __4: List ready for pickup orders__
+This option lists all orders that are cleaned and ready for customers to pickup.
+All the main menu options appear below the list.
+
+- __5: List picked up orders__
+This option lists all finalized orders that have already been cleaned and picked up by customers.
+All the main menu options appear below the list.
+
+- __6: List all orders:__
+This option allows the user to view the order history.
+All the main menu options appear below the list.
+
+- __0: Quit:__
+This option exits the program when the user selects 0, q or Q. The program then shows the message "Goodbye, have a fantastic day!"
 
 
 <details>
 <summary>Future features</summary>
+- The possibility to have a better customer database, by reusing the customer contact information for new orders, instead of creating of asking for the customer's name, email and phone number every single time.
 - The possibility to mark individual items as "ready for pickup" and later "picked up". This allows the customer to pickup items that are ready first in case they are in a rush.
 - The possibility to (in a safe way) delete to cancel orders and generate "refunds".
 - The possibility to mark an order as paid, partially paid or to be paid on pickup.
