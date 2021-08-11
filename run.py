@@ -146,7 +146,15 @@ def mark_order(order, status, date_column, clear_column_letters):
     order_id_cell = sheet.find(order_id_string, in_column=1)  # 1 = ID column
     row = order_id_cell.row
     sheet.update_cell(row, 2, status)  # 2 = Status column
-    sheet.update_cell(row, date_column, today)
+
+    # Only set the date column to today if it does not already have a value.
+    # This is so that we support moving between states to undo mistakes,
+    # without accidentally messing up the date that was already set.
+    if not sheet.cell(row, date_column).value:
+        sheet.update_cell(row, date_column, today)
+
+    # Clear the date columns that don't make sense for the new status, e.g.,
+    # clear "Picked up" when changing the status to "Ready for pickup".
     sheet.batch_clear([f'{col}{row}' for col in clear_column_letters])
 
 
