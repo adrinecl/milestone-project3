@@ -332,20 +332,22 @@ def input_order_items():
     """
     Input the count of each item that can be dry cleaned. Asks about each item
     one by one, based on the available item types in the "Prices" sheet.
-    Returns a list with the total price of the order and the count of each
-    item.
+    Returns a tuple with a list with the total price of the order and the count
+    of each item, and a boolean to indicate whether the list is empty or not.
     """
     print('Enter the number of items to clean, per item type.')
     prices = SHEET.worksheet('Prices').get_all_records()[0]
     total = 0
     items = []
+    empty = True
     for item in prices.keys():
         count = input_count(f'{item} {prices[item]}')
         price = float(prices[item][1:])  # Drop the €
         total = total + (count * price)
+        empty = empty and (count == 0)
         items.append(count)
     items.insert(0, f'€{total}')
-    return items
+    return (items, empty)
 
 
 def input_customer():
@@ -373,14 +375,19 @@ def enter_new_order():
     order_id = max([order['ID'] for order in orders]) + 1
     today = datetime.date.today().strftime('%Y-%m-%d')
     order = [order_id, 'Dropped off', today, '', '']
-    order.extend(input_order_items())
-    SHEET.worksheet('Orders').append_row(order)
+    (items, empty) = input_order_items()
+    order.extend(items)
+
+    if empty:
+        print('There are no items to clean in this order. Aborting.')
+        return
 
     print('')
     customer = [order_id]
     customer.extend(input_customer())
-    SHEET.worksheet('Customers').append_row(customer)
 
+    SHEET.worksheet('Orders').append_row(order)
+    SHEET.worksheet('Customers').append_row(customer)
     edit_order_by_id(order_id)
 
 
