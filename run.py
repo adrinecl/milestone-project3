@@ -235,7 +235,7 @@ def edit_menu(orders):
     menu, and False if the user executed a command that changed the orders.
     """
     while True:
-        command = input('> ').strip()
+        command = input('> \n').strip()
         options = {
             '1': mark_orders_ready_for_pickup,
             '2': mark_orders_picked_up,
@@ -296,7 +296,7 @@ def find_order_by_id():
     pickup.
     """
     try:
-        order_id = parse_order_id(input('Order ID: '))
+        order_id = parse_order_id(input('Order ID: \n'))
         edit_order_by_id(order_id)
     except ValueError as e:
         print('Invalid order ID:', e)
@@ -310,7 +310,7 @@ def input_count(prompt):
     """
     while True:
         try:
-            count = input(f'{prompt}: ').strip()
+            count = input(f'{prompt}: \n').strip()
             return 0 if not count else int(count)
         except ValueError as e:
             print('Number of items must be a positive number or empty/zero.')
@@ -322,7 +322,7 @@ def input_non_empty(prompt):
     empty string is entered. The string is stripped from surrounding whitspace.
     """
     while True:
-        string = input(f'{prompt}: ').strip()
+        string = input(f'{prompt}: \n').strip()
         if string:
             return string
         print('This field cannot be empty.')
@@ -412,7 +412,7 @@ def main_menu():
     """
     while True:
         print_main_menu()
-        command = input('> ').strip()
+        command = input('> \n').strip()
         options = {
             '1': enter_new_order,
             '2': find_order_by_id,
