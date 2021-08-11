@@ -38,19 +38,20 @@ In future features, it would be good to do further research on the needs of diff
 
 <details>
 <summary>Project Goals</summary>
-
+The purpose of this project is to build a command-line interface program, using Python. The program should have some basic, but essential features to bring value to a small dry cleaning business. The user should feel confident to quickly learn how to use the program and be shown at each step what other options are possible.
+Although it is a simple program, it is an efficient alternative to expensive order management systems. In this project, the main goal is to make sure that the user can quickly figure out how to operate it and center all business activities in one place and organized fashion.
 </details>
 
 <details>
 <summary>Business Goals</summary>
+The main goal of the program is to offer a an alternative to expensive order management systems for dry cleaning stores. This is the first ever version of the program for "Rinse and Repeat" and it runs on the browser through Heroku deployment. The program is free and this is a good way to test for features before potentially developing it further or even creating a paid version. Developing and deploying a program in this manner can save time, by just "shipping it" with the MVP (minimun viable product) and later iterating and improving it little by little.
 
-
-**Audience:** the program targets
+**Audience:** the program targets mainly business owners and managers of small dry cleaning stores looking for efficient and inexpensive order management solutions. Basic knowledge of English is needed.
 </details>
 
 <details>
 <summary>Customer Goals</summary>
-
+Users: quickly learn to operate and access order information to keep all business activities organized. One main goal is for the user to have one main source of truth for adding and handling customer's orders, while making it easier to manage and plan for the business as whole.
 </details>
 
 #### Scope
