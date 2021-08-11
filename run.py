@@ -14,25 +14,28 @@ SCOPE = [
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('rinse_and_repeat')
+SHEET = GSPREAD_CLIENT.open('Rinse and Repeat')
+
 
 def print_orders(orders):
     """
-    Print a list of orders in a nicely formatted table. The column titles are the
-    keys of the row dictionaries. Note that this function works with lists of rows
-    as dictionaries, not lists of rows as lists. This is the format we use in most
-    functions, e.g., `fetch_orders[_...]`.
+    Print a list of orders in a nicely formatted table. The column titles are
+    the keys of the row dictionaries. Note that this function works with lists
+    of rows as dictionaries, not lists of rows as lists. This is the format we
+    use in most functions, e.g., `fetch_orders[_...]`.
     """
     print(tabulate(orders, headers="keys"))
 
+
 def print_customers(customers):
     """
-    Print a list of customers in a nicely formatted table. The column titles are the
-    keys of the row dictionaries. Note that this function works with lists of rows
-    as dictionaries, not lists of rows as lists. This is the format we use in most
-    functions, e.g., `fetch_customers[_...]`.
+    Print a list of customers in a nicely formatted table. The column titles
+    are the keys of the row dictionaries. Note that this function works with
+    lists of rows as dictionaries, not lists of rows as lists. This is the
+    format we use in most functions, e.g., `fetch_customers[_...]`.
     """
     print(tabulate(customers, headers="keys"))
+
 
 def fetch_orders():
     """
@@ -42,56 +45,66 @@ def fetch_orders():
     """
     return SHEET.worksheet('Orders').get_all_records()
 
+
 def fetch_orders_with_status(status):
     """
-    Fetch rows from the Orders worksheet, which has a certain status. The status
-    should be one of "Dropped off", "Ready for pickup", and "Picked up". The
-    status string must be an exact match, including case and whitespace. The
-    result will be a list of zero or more items, depending on whether the ID was
-    found in the worksheet or not.
+    Fetch rows from the Orders worksheet, which has a certain status. The
+    status should be one of "Dropped off", "Ready for pickup", and "Picked up".
+    The status string must be an exact match, including case and whitespace.
+    The result will be a list of zero or more items, depending on whether the
+    ID was found in the worksheet or not.
     """
-    return list(filter(lambda order: order['Status'] == status, fetch_orders()))
+    all = fetch_orders()
+    return list(filter(lambda order: order['Status'] == status, all))
+
 
 def fetch_orders_with_id(order_id):
     """
-    Fetch rows from the Orders worksheet, which has a certain ID. The ID must be
-    a number, not a string. The result will be a list of one or zero items,
-    depending on whether the ID was found in the worksheet or not. We return the
-    single matching row as a list so that we can easily pass it to the functions
-    that works with lists of rows, e.g., `print_orders`.
+    Fetch rows from the Orders worksheet, which has a certain ID. The ID must
+    be a number, not a string. The result will be a list of one or zero items,
+    depending on whether the ID was found in the worksheet or not. We return
+    the single matching row as a list so that we can easily pass it to the
+    functions that works with lists of rows, e.g., `print_orders`.
     """
-    return list(filter(lambda order: order['ID'] == order_id, fetch_orders()))
+    all = fetch_orders()
+    return list(filter(lambda order: order['ID'] == order_id, all))
+
 
 def list_dropped_off_orders():
     """
     Fetch all orders that have the status "Dropped off" and print them to the
-    terminal as a table. There is no pagination, so if the list is long, then the
-    printed table will also be long.
+    terminal as a table. There is no pagination, so if the list is long, then
+    the printed table will also be long.
     """
     print_orders(fetch_orders_with_status('Dropped off'))
 
+
 def list_ready_for_pickup_orders():
     """
-    Fetch all orders that have the status "Ready for pickup" and print them to the
-    terminal as a table. There is no pagination, so if the list is long, then the
-    printed table will also be long.
+    Fetch all orders that have the status "Ready for pickup" and print them to
+    the terminal as a table. There is no pagination, so if the list is long,
+    then the printed table will also be long.
     """
     print_orders(fetch_orders_with_status('Ready for pickup'))
+
 
 def list_picked_up_orders():
     """
     Fetch all orders that have the status "Picked up" and print them to the
-    terminal as a table. There is no pagination, so if the list is long, then the
-    printed table will also be long.
+    terminal as a table. There is no pagination, so if the list is long, then
+    the printed table will also be long.
     """
     print_orders(fetch_orders_with_status('Picked up'))
+
 
 def list_all_orders():
     """
     Fetch all orders and print them to the terminal as a table. There is no
-    pagination, so if the list is long, then the printed table will also be long.
+    pagination, so if the list is long, then the printed table will also be
+    long.
     """
     print_orders(fetch_orders())
+
 
 def fetch_customers():
     """
@@ -101,84 +114,96 @@ def fetch_customers():
     """
     return SHEET.worksheet('Customers').get_all_records()
 
+
 def fetch_customers_with_order_id(order_id):
     """
     Fetch rows from the Customers worksheet, which has a certain order ID. The
-    order ID must be a number, not a string. The result will be a list of one or
-    zero items, depending on whether the order ID was found in the worksheet or
-    not. We return the single matching row as a list so that we can easily pass
-    it to the functions that works with lists of rows, e.g., `print_customers`.
+    order ID must be a number, not a string. The result will be a list of one
+    or zero items, depending on whether the order ID was found in the worksheet
+    or not. We return the single matching row as a list so that we can easily
+    pass it to the functions that works with lists of rows, e.g.,
+    `print_customers`.
     """
-    return list(filter(lambda customer: customer['Order ID'] == order_id, fetch_customers()))
+    all = fetch_customers()
+    return list(filter(lambda customer: customer['Order ID'] == order_id, all))
+
 
 def mark_order(order, status, date_column, clear_column_letters):
     """
-    Change the value of the "Status" column of the given order. We first find the
-    order in the spreadsheet and then update both the "Status" column and set the
-    specified date column to today's date, e.g., the "Ready for pickup" column.
-    Optionally, one or more columns can be cleared, e.g., the date columns that
-    are only set for later "Status" value, allowing the user to undo changes to
-    the order status. It is the responsibility of the caller to ensure that the
-    order exists in the sheet. If not, an unspecified error is raised and the
-    program likely exits.
+    Change the value of the "Status" column of the given order. We first find
+    the order in the spreadsheet and then update both the "Status" column and
+    set the specified date column to today's date, e.g., the "Ready for pickup"
+    column. Optionally, one or more columns can be cleared, e.g., the date
+    columns that are only set for later "Status" value, allowing the user to
+    undo changes to the order status. It is the responsibility of the caller to
+    ensure that the order exists in the sheet. If not, an unspecified error is
+    raised and the program likely exits.
     """
     today = datetime.date.today().strftime('%Y-%m-%d')
     sheet = SHEET.worksheet('Orders')
     order_id = order['ID']
     order_id_string = str(order_id)
-    order_id_cell = sheet.find(order_id_string, in_column=1) # 1 = ID column (A)
+    order_id_cell = sheet.find(order_id_string, in_column=1)  # 1 = ID column
     row = order_id_cell.row
-    sheet.update_cell(row, 2, status) # 2 = Status column (B)
+    sheet.update_cell(row, 2, status)  # 2 = Status column
     sheet.update_cell(row, date_column, today)
     sheet.batch_clear([f'{col}{row}' for col in clear_column_letters])
 
+
 def mark_orders(orders, status, date_column, clear_columns):
     """
-    Change the value of the "Status" column of the given list of orders. We first
-    find the orders in the spreadsheet and then update both the "Status" column
-    and set the specified date column to today's date, e.g., the "Ready for
-    pickup" column. It is the responsibility of the caller to ensure that all
-    orders exist in the sheet. If not, an unspecified error is raised and the
-    program likely exits.
+    Change the value of the "Status" column of the given list of orders. We
+    first find the orders in the spreadsheet and then update both the "Status"
+    column and set the specified date column to today's date, e.g., the "Ready
+    for pickup" column. It is the responsibility of the caller to ensure that
+    all orders exist in the sheet. If not, an unspecified error is raised and
+    the program likely exits.
     """
     for order in orders:
         mark_order(order, status, date_column, clear_columns)
 
+
 def mark_orders_ready_for_pickup(orders):
     """
-    Change the value of the "Status" column of the given list of orders to "Ready
-    to pickup", and update set the "Ready for pickup" date column to today's date.
-    The "Picked up" date column is cleared. It is the responsibility of the caller
-    to ensure that all orders exist in the sheet. If not, an unspecified error is
-    raised and the program likely exits.
+    Change the value of the "Status" column of the given list of orders to
+    "Ready to pickup", and update set the "Ready for pickup" date column to
+    today's date. The "Picked up" date column is cleared. It is the
+    responsibility of the caller to ensure that all orders exist in the sheet.
+    If not, an unspecified error is raised and the program likely exits.
     """
     mark_orders(orders, 'Ready for pickup', 4, ['E'])
 
+
 def mark_orders_picked_up(orders):
     """
-    Change the value of the "Status" column of the given list of orders to "Picked
-    up", and update set the "Picked up" date column to today's date. It is the
-    responsibility of the caller to ensure that all orders exist in the sheet. If
-    not, an unspecified error is raised and the program likely exits.
+    Change the value of the "Status" column of the given list of orders to
+    "Picked up", and update set the "Picked up" date column to today's date.
+    It is the responsibility of the caller to ensure that all orders exist in
+    the sheet. If not, an unspecified error is raised and the program likely
+    exits.
     """
     mark_orders(orders, 'Picked up', 5, [])
 
+
 def view_customer_information(orders):
     """
-    Fetch the customer for the given order and print their information in a nice
-    table. Note that this function currently has the limitation that it accepts
-    exactly one order in the list, no more, no less. It is the responsibility of
-    the caller to make sure that the list contains exaclly one order.
+    Fetch the customer for the given order and print their information in a
+    nice table. Note that this function currently has the limitation that it
+    accepts exactly one order in the list, no more, no less. It is the
+    responsibility of the caller to make sure that the list contains exaclly
+    one order.
     """
     order_id = orders[0]['ID']
     customers = fetch_customers_with_order_id(order_id)
     print_customers(customers)
 
+
 def print_edit_menu():
     """
-    Print a list of commands for the order editing. This function does not handle
-    user input, it just prints the list to the terminal. The commands are numbered
-    from 1 through 4, with a special 0 command to go back to the previous menu.
+    Print a list of commands for the order editing. This function does not
+    handle user input, it just prints the list to the terminal. The commands
+    are numbered from 1 through 4, with a special 0 command to go back to the
+    previous menu.
     """
     print('')
     print('1: Mark as ready for pickup')
@@ -189,10 +214,11 @@ def print_edit_menu():
     print('0: Back')
     print('')
 
+
 def edit_menu(orders):
     """
-    Display the order editing menu, given a list of orders. The user can input a
-    command number from the list. If the command is valid, the corresponding
+    Display the order editing menu, given a list of orders. The user can input
+    a command number from the list. If the command is valid, the corresponding
     command function is executed; otherwise print an error message and the ask
     the user again to enter a menu command. Returns True if the user exited the
     menu, and False if the user executed a command that changed the orders.
@@ -204,10 +230,10 @@ def edit_menu(orders):
             '2': mark_orders_picked_up,
             '3': view_customer_information
         }
-        if not command: continue
-        if command == '0': return (True, False)
-        if command == 'b': return (True, False)
-        if command == 'B': return (True, False)
+        if not command:
+            continue
+        if command in ['0', 'b', 'B']:
+            return (True, False)
         if command not in options:
             print('Unknown command:', command)
             print('')
@@ -215,6 +241,7 @@ def edit_menu(orders):
         print('')
         options[command](orders)
         return (False, command != '3')
+
 
 def edit_order_by_id(order_id):
     """
@@ -237,6 +264,7 @@ def edit_order_by_id(order_id):
         print_edit_menu()
         (back, load) = edit_menu(orders)
 
+
 def parse_order_id(order_id_string):
     """
     Given a string, as entered by the user, convert it to a validated order ID.
@@ -245,20 +273,23 @@ def parse_order_id(order_id_string):
     """
     order_id = int(order_id_string)
     if order_id <= 0:
-       raise ValueError('Must be greater than 0.')
+        raise ValueError('Must be greater than 0.')
     return order_id
+
 
 def find_order_by_id():
     """
-    Ask the user to enter an order ID and look it up in the Orders worksheet. If
-    the order is found, print it and enter a submenu with operations that can be
-    performed on the single order, e.g., marking it as being ready for pickup.
+    Ask the user to enter an order ID and look it up in the Orders worksheet.
+    If the order is found, print it and enter a submenu with operations that
+    can be performed on the single order, e.g., marking it as being ready for
+    pickup.
     """
     try:
         order_id = parse_order_id(input('Order ID: '))
         edit_order_by_id(order_id)
     except ValueError as e:
         print('Invalid order ID:', e)
+
 
 def input_count(prompt):
     """
@@ -269,10 +300,10 @@ def input_count(prompt):
     while True:
         try:
             count = input(f'{prompt}: ').strip()
-            if not count: return 0
-            return int(count)
+            return 0 if not count else int(count)
         except ValueError as e:
-            print('Number of items must be a positive number or zero (or empty for zero).')
+            print('Number of items must be a positive number or empty/zero.')
+
 
 def input_non_empty(prompt):
     """
@@ -281,14 +312,17 @@ def input_non_empty(prompt):
     """
     while True:
         string = input(f'{prompt}: ').strip()
-        if string: return string
+        if string:
+            return string
         print('This field cannot be empty.')
+
 
 def input_order_items():
     """
     Input the count of each item that can be dry cleaned. Asks about each item
-    one by one, based on the available item types in the "Prices" sheet. Returns
-    a list with the total price of the order and the count of each item.
+    one by one, based on the available item types in the "Prices" sheet.
+    Returns a list with the total price of the order and the count of each
+    item.
     """
     print('Enter the number of items to clean, per item type.')
     prices = SHEET.worksheet('Prices').get_all_records()[0]
@@ -296,24 +330,26 @@ def input_order_items():
     items = []
     for item in prices.keys():
         count = input_count(f'{item} {prices[item]}')
-        price = float(prices[item][1:]) # Drop the €
+        price = float(prices[item][1:])  # Drop the €
         total = total + (count * price)
         items.append(count)
     items.insert(0, f'€{total}')
     return items
 
+
 def input_customer():
     """
     Input the customer information for the current order. Asks for the customer
-    name, email, and phone number. Returns a list of these values in this order.
-    None of the fields may be empty, but we don't validate that the email and
-    phone number are correct.
+    name, email, and phone number. Returns a list of these values in this
+    order. None of the fields may be empty, but we don't validate that the
+    email and phone number are correct.
     """
     print('Enter customer information.')
     name = input_non_empty('Name')
     email = input_non_empty('Email')
     mobile = input_non_empty('Mobile')
     return [name, email, mobile]
+
 
 def enter_new_order():
     """
@@ -336,11 +372,12 @@ def enter_new_order():
 
     edit_order_by_id(order_id)
 
+
 def print_main_menu():
     """
-    Print a list of commands for the main menu. This function does not handle user
-    input, it just prints the list to the terminal. The commands are numbered from
-    1 through 6, with a special 0 command to quit the program.
+    Print a list of commands for the main menu. This function does not handle
+    user input, it just prints the list to the terminal. The commands are
+    numbered from 1 through 6, with a special 0 command to quit the program.
     """
     print('')
     print('1: Enter a new order')
@@ -353,6 +390,7 @@ def print_main_menu():
     print('')
     print('0: Quit')
     print('')
+
 
 def main_menu():
     """
@@ -372,27 +410,33 @@ def main_menu():
             '5': list_picked_up_orders,
             '6': list_all_orders,
         }
-        if not command: continue
-        if command == '0': break
-        if command == 'q': break
-        if command == 'Q': break
+        if not command:
+            continue
+        if command in ['0', 'q', 'Q']:
+            break
         if command not in options:
             print('Unknown command:', command)
             continue
         print('')
         options[command]()
 
+
 def main():
     """
-    Print a welcome message and some instructions on how to use the program, after
-    which the main menu is displayed and run until the program is asked to quit,
-    by user input. Finally, print a goodbye message, because it is just polite.
+    Print a welcome message and some instructions on how to use the program,
+    after which the main menu is displayed and run until the program is asked
+    to quit, by user input. Finally, print a goodbye message, because it is
+    just polite.
     """
     print('')
     print('Welcome to Rinse and Repeat dry cleaning')
     print('----------------------------------------')
-    print('Enter menu commands (1 through 6) from the list below using the keyboard.')
-    print('Press return to perform the command. To exit the program, enter 0 or Q.')
+    print((
+        'Enter menu commands (1 through 6)'
+        'from the list below using the keyboard.'))
+    print((
+        'Press return to perform the command.'
+        'To exit the program, enter 0 or Q.'))
     main_menu()
     print('')
     print('Goodbye, have a fantastic day!')
