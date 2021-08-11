@@ -202,7 +202,7 @@ def parse_order_id(order_id_string):
     """
     order_id = int(order_id_string)
     if order_id <= 0:
-        raise ValueError('Must be greater than 0.')
+       raise ValueError('Must be greater than 0.')
     return order_id
 
 def find_order_by_id():
@@ -215,7 +215,37 @@ def find_order_by_id():
         order_id = parse_order_id(input('Order ID: '))
         edit_order_by_id(order_id)
     except ValueError as e:
-       print('Invalid order ID:', e)
+        print('Invalid order ID:', e)
+
+def enter_count(prompt):
+    while True:
+        try:
+            count = input(f'{prompt}: ').strip()
+            if not count: return 0
+            return int(count)
+        except ValueError as e:
+            print('Number of items must be a positive number or zero (or empty for zero).')
+
+def enter_order_items():
+    prices = SHEET.worksheet('Prices').get_all_records()[0]
+    total = 0
+    items = []
+    for item in prices.keys():
+        count = enter_count(f'{item} {prices[item]}')
+        price = float(prices[item][1:]) # Drop the €
+        total = total + (count * price)
+        items.append(count)
+    items.insert(0, f'€{total}')
+    return items
+
+def enter_new_order():
+    orders = fetch_orders()
+    order_id = max([order['ID'] for order in orders]) + 1
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    order = [order_id, 'Dropped off', today, '', '']
+    order.extend(enter_order_items())
+    SHEET.worksheet('Orders').append_row(order)
+    edit_order_by_id(order_id)
 
 def print_main_menu():
     """
@@ -230,6 +260,7 @@ def print_main_menu():
     print('3: List dropped off orders')
     print('4: List ready for pickup orders')
     print('5: List picked up orders')
+    print('6: List all orders')
     print('')
     print('0: Quit')
     print('')
@@ -245,6 +276,7 @@ def main_menu():
         print_main_menu()
         command = input('> ').strip()
         options = {
+            '1': enter_new_order,
             '2': find_order_by_id,
             '3': list_dropped_off_orders,
             '4': list_ready_for_pickup_orders,
