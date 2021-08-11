@@ -99,14 +99,23 @@ The following features will be included in the current project's scope:
 1. [Gitpod](https://www.gitpod.io/) 
     - Gitpod was used for the development of the website, by running Visual Studio Code (VS Code) to edit code, commiting to Git and pushing to GitHub.
 
-6. [VS Code](https://code.visualstudio.com/)
+2. [VS Code](https://code.visualstudio.com/)
     - VS Code is used to edit the code on Gitpod.
 
-7. [Git](https://git-scm.com/)
+3. [Git](https://git-scm.com/)
     - Git was used for version control with the Gitpod terminal to commit to Git and then push to GitHub.
 
-8. [GitHub](https://github.com/)
+4. [GitHub](https://github.com/)
     - GitHub is used to get the initial project template from Code Institute's repository. Then all of the incremental progress was documented through commits pushed to this ![GitHub repository](https://github.com/adrinecl/milestone-project2), where you can also find the code and files that belong the project. After being pushed from Git, the files are updated and the ![commit history](https://github.com/adrinecl/milestone-project2/commits/master) is available here. The website was also deployed to GitHub pages for the live demo.
+
+5. [Google Cloud Platform](https://cloud.google.com/)
+    - Google Cloud Platform was used to wipe up the Google Drive and Google Sheets APIs to the project.
+
+6. [Google Sheets](https://www.google.com/sheets/about/)
+    - Google Sheets was used for the spreadsheet to store and access data used in the program.
+
+7. [Google Drive](https://www.google.com/drive/)
+    - Google Drive is used indirectly, since this is where the Google Sheets spreadsheet is stored.
 
 
 </details>
