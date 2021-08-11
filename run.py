@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 import gspread
 from tabulate import tabulate

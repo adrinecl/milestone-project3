@@ -3,7 +3,7 @@
 [View the live project here.](https://rinse-and-repeat.herokuapp.com/)
 
 
-![Program Mockup](**ADD IMAGE LATER**)
+![Program](https://github.com/adrinecl/milestone-project3/blob/master/docs/images/rinse-and-repeat_start.jpg)
 
 ## About the Program
 
@@ -251,7 +251,9 @@ All code written by the developer, Adrine Curcio Lindström.
 
 Main sources used for consultation and troubleshooting:
 
-1. 
+1. [Python Developer's Guide](https://devguide.python.org/)
+2. [PEP 8 -- Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/?#code-lay-out)
+3. [Python Tutor](http://pythontutor.com/)
 
 #### Content
 
