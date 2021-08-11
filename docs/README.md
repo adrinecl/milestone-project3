@@ -190,7 +190,7 @@ This option exits the program when the user selects 0, q or Q. The program then 
 ### Validator Testing
 
 #### Python
-No validator testing was used for Python
+[PEP8 Online - Python Validator](http://pep8online.com/)
 
 ### Test Cases
 
@@ -221,8 +221,8 @@ These are the steps to deploy to GitHub Pages:
 1. Log in to GitHub and locate the GitHub Repository one wishes to deploy with Gitpod.
 2. At the top right of the Repository (not top of page), locate the "Gitpod" button.
 3. This will create a workspace on Gitpod for this project.
-4. Using the Terminal on Gitpod, type "python3 -m http.server".
-5. A blue button will pop on the bottom right of the screen with the options to make it public, open in preview or the browser (Port 8000).
+4. Using the Terminal on Gitpod, type "python3 run.py".
+5. The program will then run in the terminal.
 
 ### Heroku
 

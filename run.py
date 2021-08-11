@@ -224,7 +224,12 @@ def find_order_by_id():
     except ValueError as e:
         print('Invalid order ID:', e)
 
-def enter_count(prompt):
+def input_count(prompt):
+    """
+    Input the count of an item that can be dry cleaned, accepting positive
+    integers, including zero and empty (meaning zero as well). Keeps asking
+    the user for the count until a valid number is entered.
+    """
     while True:
         try:
             count = input(f'{prompt}: ').strip()
@@ -233,25 +238,66 @@ def enter_count(prompt):
         except ValueError as e:
             print('Number of items must be a positive number or zero (or empty for zero).')
 
-def enter_order_items():
+def input_non_empty(prompt):
+    """
+    Input a non-empty string. Keeps asking the user for the string until a non-
+    empty string is entered. The string is stripped from surrounding whitspace.
+    """
+    while True:
+        string = input(f'{prompt}: ').strip()
+        if string: return string
+        print('This field cannot be empty.')
+
+def input_order_items():
+    """
+    Input the count of each item that can be dry cleaned. Asks about each item
+    one by one, based on the available item types in the "Prices" sheet. Returns
+    a list with the total price of the order and the count of each item.
+    """
+    print('Enter the number of items to clean, per item type.')
     prices = SHEET.worksheet('Prices').get_all_records()[0]
     total = 0
     items = []
     for item in prices.keys():
-        count = enter_count(f'{item} {prices[item]}')
+        count = input_count(f'{item} {prices[item]}')
         price = float(prices[item][1:]) # Drop the €
         total = total + (count * price)
         items.append(count)
     items.insert(0, f'€{total}')
     return items
 
+def input_customer():
+    """
+    Input the customer information for the current order. Asks for the customer
+    name, email, and phone number. Returns a list of these values in this order.
+    None of the fields may be empty, but we don't validate that the email and
+    phone number are correct.
+    """
+    print('Enter customer information.')
+    name = input_non_empty('Name')
+    email = input_non_empty('Email')
+    mobile = input_non_empty('Mobile')
+    return [name, email, mobile]
+
 def enter_new_order():
+    """
+    Enter a new order by asking the user to input the customer information
+    (name, email, and phone number) and the count of each type of item to
+    clean. Once the information has been entered, a new row is added to the
+    "Orders" sheet and also the "Customers" sheet.
+    """
     orders = fetch_orders()
     order_id = max([order['ID'] for order in orders]) + 1
     today = datetime.date.today().strftime('%Y-%m-%d')
     order = [order_id, 'Dropped off', today, '', '']
-    order.extend(enter_order_items())
+    order.extend(input_order_items())
     SHEET.worksheet('Orders').append_row(order)
+
+    print('')
+    customer = [order_id]
+    customer.extend(input_customer())
+    SHEET.worksheet('Customers').append_row(customer)
+
     edit_order_by_id(order_id)
 
 def print_main_menu():
@@ -304,15 +350,15 @@ def main():
     """
     Print a welcome message and some instructions on how to use the program, after
     which the main menu is displayed and run until the program is asked to quit,
-    by user input. Finally, print a goodbye message, because it is just polite.
+    by user input. Finally, print a good bye message, because it is just polite.
     """
     print('')
-    print('Welcome to Rinse and Repeat Dry Cleaning')
+    print('Welcome to Rinse and Repeat dry cleaning')
     print('----------------------------------------')
-    print('Enter menu commands (1 through 6) from the list below using the keyboard.')
+    print('Enter menu commands (1 through 5) from the list below using the keyboard.')
     print('Press return to perform the command. To exit the program, enter 0 or Q.')
     main_menu()
     print('')
-    print('Goodbye, have a fantastic day!')
+    print('Good bye, have a fantastic day!')
 
 main()
