@@ -75,6 +75,68 @@ def list_picked_up_orders():
     """
     print_orders(fetch_orders_with_status('Picked up'))
 
+def mark_order(order, status, date_column, clear_column_letters):
+    """
+    Change the value of the "Status" column of the given order. We first find the
+    order in the spreadsheet and then update both the "Status" column and set the
+    specified date column to today's date, e.g., the "Ready for pickup" column.
+    Optionally, one or more columns can be cleared, e.g., the date columns that
+    are only set for later "Status" value, allowing the user to undo changes to
+    the order status. It is the responsibility of the caller to ensure that the
+    order exists in the sheet. If not, an unspecified error is raised and the
+    program likely exits.
+    """
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    sheet = SHEET.worksheet('Orders')
+    order_id = order['ID']
+    order_id_string = str(order_id)
+    order_id_cell = sheet.find(order_id_string, in_column=1) # 1 = ID column (A)
+    row = order_id_cell.row
+    sheet.update_cell(row, 2, status) # 2 = Status column (B)
+    sheet.update_cell(row, date_column, today)
+    sheet.batch_clear([f'{col}{row}' for col in clear_column_letters])
+
+def mark_orders(orders, status, date_column, clear_columns):
+    """
+    Change the value of the "Status" column of the given list of orders. We first
+    find the orders in the spreadsheet and then update both the "Status" column
+    and set the specified date column to today's date, e.g., the "Ready for
+    pickup" column. It is the responsibility of the caller to ensure that all
+    orders exist in the sheet. If not, an unspecified error is raised and the
+    program likely exits.
+    """
+    for order in orders:
+        mark_order(order, status, date_column, clear_columns)
+
+def mark_orders_dropped_off(orders):
+    """
+    Change the value of the "Status" column of the given list of orders to
+    "Dropped off", and update set the "Dropped off" date column to today's date.
+    The "Ready for pickup" and "Picked up" date columns are cleared. It is the
+    responsibility of the caller to ensure that all orders exist in the sheet. If
+    not, an unspecified error is raised and the program likely exits.
+    """
+    mark_orders(orders, 'Ready for pickup', 3, ['D', 'E'])
+
+def mark_orders_ready_for_pickup(orders):
+    """
+    Change the value of the "Status" column of the given list of orders to "Ready
+    to pickup", and update set the "Ready for pickup" date column to today's date.
+    The "Picked up" date column is cleared. It is the responsibility of the caller
+    to ensure that all orders exist in the sheet. If not, an unspecified error is
+    raised and the program likely exits.
+    """
+    mark_orders(orders, 'Ready for pickup', 4, ['E'])
+
+def mark_orders_picked_up(orders):
+    """
+    Change the value of the "Status" column of the given list of orders to "Picked
+    up", and update set the "Picked up" date column to today's date. It is the
+    responsibility of the caller to ensure that all orders exist in the sheet. If
+    not, an unspecified error is raised and the program likely exits.
+    """
+    mark_orders(orders, 'Picked up', 5, [])
+
 def print_edit_menu():
     """
     Print a list of commands for the order editing. This function does not handle
@@ -82,8 +144,9 @@ def print_edit_menu():
     from 1 through 2, with a special 0 command to go back to the previous menu.
     """
     print('')
-    print('1: Mark as ready for pickup')
-    print('2: Mark as picked up')
+    print('1: Mark as dropped off')
+    print('2: Mark as ready for pickup')
+    print('3: Mark as picked up')
     print('')
     print('0: Back')
     print('')
@@ -93,22 +156,43 @@ def edit_menu(orders):
     Display the order editing menu, given a list of orders. The user can input a
     command number from the list. If the command is valid, the corresponding
     command function is executed; otherwise print an error message and the ask
-    the user again to enter a menu command.
+    the user again to enter a menu command. Returns False if the user exited the
+    menu, and True if the user executed a command that changed the orders.
     """
     while True:
+        print_orders(orders)
         print_edit_menu()
         command = input('> ').strip()
-        options = {}
+        options = {
+            '1': mark_orders_dropped_off,
+            '2': mark_orders_ready_for_pickup,
+            '3': mark_orders_picked_up
+        }
         if not command: continue
-        if command == '0': break
-        if command == 'b': break
-        if command == 'B': break
+        if command == '0': return False
+        if command == 'b': return False
+        if command == 'B': return False
         if command not in options:
             print('Unknown command:', command)
             print('')
             continue
         print('')
         options[command](orders)
+        return True
+
+def edit_order_by_id(order_id):
+    """
+    Fetch the order matching the order ID entered by the user. If the order can
+    be found, display the edit meny, otherwise print an error message and exit. 
+    """
+    print('')
+    while True:
+        orders = fetch_orders_with_id(order_id)
+        if len(orders) == 0:
+            print('Could not find an order with a matching ID.')
+            break
+        if not edit_menu(orders):
+            break
 
 def parse_order_id(order_id_string):
     """
@@ -128,16 +212,10 @@ def find_order_by_id():
     performed on the single order, e.g., marking it as being ready for pickup.
     """
     try:
-      order_id = parse_order_id(input('Order ID: '))
-      orders = fetch_orders_with_id(order_id)
-      if len(orders):
-          print('')
-          print_orders(orders)
-          edit_menu(orders)
-      else:
-          print('Could not find an order with a matching ID.')
+        order_id = parse_order_id(input('Order ID: '))
+        edit_order_by_id(order_id)
     except ValueError as e:
-        print('Invalid order ID:', e)
+       print('Invalid order ID:', e)
 
 def print_main_menu():
     """
